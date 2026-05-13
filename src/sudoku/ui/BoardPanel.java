@@ -4,6 +4,8 @@ import sudoku.model.Board;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class BoardPanel extends JPanel {
 
@@ -55,8 +57,42 @@ public class BoardPanel extends JPanel {
                     field.setText("");
                     field.setEditable(true);
                     field.setBackground(Color.WHITE);
+                    addValidationListener(field, row, col, board);
                 }
             }
         }
+    }
+
+    private void addValidationListener(JTextField field, int row, int col, Board board) {
+        field.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                handleChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                field.setBackground(Color.WHITE);
+                board.setValue(row, col, 0);
+                board.getCell(row, col).setHasError(false);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {}
+
+            private void handleChange() {
+                String text = field.getText();
+                if (text.isEmpty()) return;
+
+                int value = Integer.parseInt(text);
+                board.setValue(row, col, value);
+
+                boolean valid = board.validate(row, col, value);
+                board.getCell(row, col).setHasError(!valid);
+
+                field.setBackground(valid ? Color.WHITE : new Color(255, 200, 200));
+            }
+        });
     }
 }

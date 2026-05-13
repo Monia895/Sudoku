@@ -35,4 +35,24 @@ public class Board {
             }
         }
     }
+
+    public boolean validate(int row, int col, int value) {
+        for (int c = 0; c < 9; c++) {
+            if (c != col && cells[row][c].getValue() == value) return false;
+        }
+
+        for (int r = 0; r < 9; r++) {
+            if (r != row && cells[r][col].getValue() == value) return false;
+        }
+
+        int startRow = (row / 3) * 3;
+        int startCol = (col / 3) * 3;
+        for (int r = startRow; r < startRow + 3; r++) {
+            for (int c = startCol; c < startCol + 3; c++) {
+                if (r != row && c != col && cells[r][c].getValue() == value) return false;
+            }
+        }
+
+        return true;
+    }
 }
