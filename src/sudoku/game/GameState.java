@@ -26,4 +26,10 @@ public class GameState {
         elapsedSeconds = 0;
         isRunning = false;
     }
+
+    public String getFormattedTime() {
+        int minutes = elapsedSeconds / 60;
+        int seconds = elapsedSeconds % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
 }
