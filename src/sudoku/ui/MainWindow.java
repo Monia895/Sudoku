@@ -34,9 +34,25 @@ public class MainWindow extends JFrame {
         mainPanel.add(boardPanel, BorderLayout.CENTER);
         mainPanel.add(createSidePanel(), BorderLayout.EAST);
 
-        boardPanel.setGameEventListener(() -> {
-            gameState.incrementErrors();
-            errorLabel.setText("Błędy: " + gameState.getErrorCount() + "/3");
+        boardPanel.setGameEventListener(new GameEventListener() {
+            @Override
+            public void onError() {
+                gameState.incrementErrors();
+                errorLabel.setText("Błędy: " + gameState.getErrorCount() + "/3");
+            }
+
+            @Override
+            public void onCorrectInput() {
+                if (board.isSolved()) {
+                    swingTimer.stop();
+                    JOptionPane.showMessageDialog(
+                            MainWindow.this,
+                            "Gratulacje! Czas: " + gameState.getFormattedTime(),
+                            "Wygrana!",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                }
+            }
         });
 
         add(mainPanel);

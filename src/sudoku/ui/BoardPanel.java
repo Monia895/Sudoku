@@ -96,6 +96,10 @@ public class BoardPanel extends JPanel {
                 if (!valid && gameEventListener != null) {
                     gameEventListener.onError();
                 }
+
+                if (valid && gameEventListener != null) {
+                    gameEventListener.onCorrectInput();
+                }
             }
         });
     }

@@ -55,4 +55,17 @@ public class Board {
 
         return true;
     }
+
+    public boolean isSolved() {
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                Cell cell = cells[row][col];
+                if (cell.getValue() == 0) return false;
+                if (cell.hasError()) return false;
+            }
+        }
+        return true;
+    }
+
+
 }
