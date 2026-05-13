@@ -34,6 +34,11 @@ public class MainWindow extends JFrame {
         mainPanel.add(boardPanel, BorderLayout.CENTER);
         mainPanel.add(createSidePanel(), BorderLayout.EAST);
 
+        boardPanel.setGameEventListener(() -> {
+            gameState.incrementErrors();
+            errorLabel.setText("Błędy: " + gameState.getErrorCount() + "/3");
+        });
+
         add(mainPanel);
         pack();
         setLocationRelativeTo(null);

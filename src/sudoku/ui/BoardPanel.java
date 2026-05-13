@@ -92,7 +92,17 @@ public class BoardPanel extends JPanel {
                 board.getCell(row, col).setHasError(!valid);
 
                 field.setBackground(valid ? Color.WHITE : new Color(255, 200, 200));
+
+                if (!valid && gameEventListener != null) {
+                    gameEventListener.onError();
+                }
             }
         });
+    }
+
+    private GameEventListener gameEventListener;
+
+    public void setGameEventListener(GameEventListener listener) {
+        this.gameEventListener = listener;
     }
 }
