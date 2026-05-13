@@ -26,4 +26,13 @@ public class Board {
         return cells[row][col];
     }
 
+    public void loadPuzzle(int[][] puzzle) {
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                int value = puzzle[row][col];
+                cells[row][col].setValue(value);
+                cells[row][col].setFixed(value > 0);
+            }
+        }
+    }
 }
