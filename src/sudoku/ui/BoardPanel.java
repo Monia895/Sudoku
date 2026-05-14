@@ -46,6 +46,8 @@ public class BoardPanel extends JPanel {
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 JTextField field = fields[row][col];
+                field.setDocument(new LimitDocument());
+
                 int value = board.getValue(row, col);
 
                 if (value > 0) {

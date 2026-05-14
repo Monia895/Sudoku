@@ -24,7 +24,7 @@ public class MainWindow extends JFrame {
         board = new Board();
         gameState = new GameState();
 
-        board.loadPuzzle(getTestPuzzle());
+        board.loadPuzzle(getNextPuzzle());
 
         boardPanel = new BoardPanel();
         boardPanel.loadPuzzle(board);
@@ -91,8 +91,7 @@ public class MainWindow extends JFrame {
         JButton newGameButton = new JButton("Nowa gra");
         newGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         newGameButton.setMaximumSize(new Dimension(120, 35));
-        newGameButton.addActionListener(e -> {
-        });
+        newGameButton.addActionListener(e -> newGame());
 
         JButton resetButton = new JButton("Resetuj");
         resetButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -128,24 +127,67 @@ public class MainWindow extends JFrame {
         errorLabel.setText("Błędy: 0/3");
 
         board = new Board();
-        board.loadPuzzle(getTestPuzzle());
+        board.loadPuzzle(getNextPuzzle());
         boardPanel.setEnabled(true);
         boardPanel.loadPuzzle(board);
 
         startTimer();
     }
 
-    private int[][] getTestPuzzle() {
-        return new int[][] {
-                {5, 3, 0, 0, 7, 0, 0, 0, 0},
-                {6, 0, 0, 1, 9, 5, 0, 0, 0},
-                {0, 9, 8, 0, 0, 0, 0, 6, 0},
-                {8, 0, 0, 0, 6, 0, 0, 0, 3},
-                {4, 0, 0, 8, 0, 3, 0, 0, 1},
-                {7, 0, 0, 0, 2, 0, 0, 0, 6},
-                {0, 6, 0, 0, 0, 0, 2, 8, 0},
-                {0, 0, 0, 4, 1, 9, 0, 0, 5},
-                {0, 0, 0, 0, 8, 0, 0, 7, 9}
-        };
+    private static final int[][][] PUZZLES = {
+            {
+                    {5,3,0,0,7,0,0,0,0},
+                    {6,0,0,1,9,5,0,0,0},
+                    {0,9,8,0,0,0,0,6,0},
+                    {8,0,0,0,6,0,0,0,3},
+                    {4,0,0,8,0,3,0,0,1},
+                    {7,0,0,0,2,0,0,0,6},
+                    {0,6,0,0,0,0,2,8,0},
+                    {0,0,0,4,1,9,0,0,5},
+                    {0,0,0,0,8,0,0,7,9}
+            },
+            {
+                    {0,0,0,2,6,0,7,0,1},
+                    {6,8,0,0,7,0,0,9,0},
+                    {1,9,0,0,0,4,5,0,0},
+                    {8,2,0,1,0,0,0,4,0},
+                    {0,0,4,6,0,2,9,0,0},
+                    {0,5,0,0,0,3,0,2,8},
+                    {0,0,9,3,0,0,0,7,4},
+                    {0,4,0,0,5,0,0,3,6},
+                    {7,0,3,0,1,8,0,0,0}
+            },
+            {
+                    {0,0,0,0,0,0,0,1,2},
+                    {0,0,0,0,3,5,0,0,0},
+                    {0,0,0,6,0,0,0,7,0},
+                    {7,0,0,0,0,0,3,0,0},
+                    {0,0,0,4,0,0,8,0,0},
+                    {1,0,0,0,0,0,0,0,0},
+                    {0,0,0,1,2,0,0,0,0},
+                    {0,8,0,0,0,0,0,4,0},
+                    {0,5,0,0,0,0,6,0,0}
+            }
+    };
+
+    private int currentPuzzleIndex = 0;
+
+    private int[][] getNextPuzzle() {
+        currentPuzzleIndex = (currentPuzzleIndex + 1) % PUZZLES.length;
+        return PUZZLES[currentPuzzleIndex];
+    }
+
+    private void newGame() {
+        swingTimer.stop();
+        gameState.reset();
+        timerLabel.setText("00:00");
+        errorLabel.setText("Błędy: 0/3");
+
+        board = new Board();
+        board.loadPuzzle(getNextPuzzle());
+        boardPanel.setEnabled(true);
+        boardPanel.loadPuzzle(board);
+
+        startTimer();
     }
 }
