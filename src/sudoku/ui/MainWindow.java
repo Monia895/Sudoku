@@ -39,6 +39,17 @@ public class MainWindow extends JFrame {
             public void onError() {
                 gameState.incrementErrors();
                 errorLabel.setText("Błędy: " + gameState.getErrorCount() + "/3");
+
+                if (gameState.getErrorCount() >= 3) {
+                    swingTimer.stop();
+                    boardPanel.setEnabled(false);
+                    JOptionPane.showMessageDialog(
+                            MainWindow.this,
+                            "Wykorzystałeś wszystkie próby.",
+                            "Koniec gry",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
             }
 
             @Override
@@ -118,6 +129,7 @@ public class MainWindow extends JFrame {
 
         board = new Board();
         board.loadPuzzle(getTestPuzzle());
+        boardPanel.setEnabled(true);
         boardPanel.loadPuzzle(board);
 
         startTimer();

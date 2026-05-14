@@ -9,6 +9,8 @@ import javax.swing.event.DocumentListener;
 
 public class BoardPanel extends JPanel {
 
+    private Board board;
+
     private JTextField[][] fields = new JTextField[9][9];
 
     public BoardPanel() {
@@ -39,11 +41,8 @@ public class BoardPanel extends JPanel {
         return new MatteBorder(top, left, bottom, right, Color.BLACK);
     }
 
-    public JTextField getField(int row, int col) {
-        return fields[row][col];
-    }
-
     public void loadPuzzle(Board board) {
+        this.board = board;
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 JTextField field = fields[row][col];
@@ -102,6 +101,22 @@ public class BoardPanel extends JPanel {
                 }
             }
         });
+    }
+
+    public JTextField getField(int row, int col) {
+        return fields[row][col];
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {  // <-- tutaj
+        super.setEnabled(enabled);
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                if (!board.isFixed(row, col)) {
+                    fields[row][col].setEditable(enabled);
+                }
+            }
+        }
     }
 
     private GameEventListener gameEventListener;
