@@ -6,7 +6,7 @@ import sudoku.model.Board;
 import javax.swing.*;
 import java.awt.*;
 
-public class MainWindow extends JFrame {
+public class MainWindowV2 extends JFrame {
 
     private BoardPanel boardPanel;
     private Board board;
@@ -16,8 +16,8 @@ public class MainWindow extends JFrame {
     private JLabel errorLabel;
     private javax.swing.Timer swingTimer;
 
-    public MainWindow() {
-        setTitle("Sudoku");
+    public MainWindowV2() {
+        setTitle("Sudoku - Wersja rozszerzona");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
 
@@ -46,7 +46,7 @@ public class MainWindow extends JFrame {
                     errorLabel.setForeground(Color.RED);
                     setTitle("Sudoku — Koniec gry");
                     JOptionPane.showMessageDialog(
-                            MainWindow.this,
+                            MainWindowV2.this,
                             "Wykorzystałeś wszystkie próby.",
                             "Koniec gry",
                             JOptionPane.ERROR_MESSAGE
@@ -60,7 +60,7 @@ public class MainWindow extends JFrame {
                     swingTimer.stop();
                     setTitle("Sudoku — Wygrana!");
                     JOptionPane.showMessageDialog(
-                            MainWindow.this,
+                            MainWindowV2.this,
                             "Gratulacje! Czas: " + gameState.getFormattedTime(),
                             "Wygrana!",
                             JOptionPane.INFORMATION_MESSAGE
