@@ -43,6 +43,8 @@ public class MainWindow extends JFrame {
                 if (gameState.getErrorCount() >= 3) {
                     swingTimer.stop();
                     boardPanel.setEnabled(false);
+                    errorLabel.setForeground(Color.RED);
+                    setTitle("Sudoku — Koniec gry");
                     JOptionPane.showMessageDialog(
                             MainWindow.this,
                             "Wykorzystałeś wszystkie próby.",
@@ -56,6 +58,7 @@ public class MainWindow extends JFrame {
             public void onCorrectInput() {
                 if (board.isSolved()) {
                     swingTimer.stop();
+                    setTitle("Sudoku — Wygrana!");
                     JOptionPane.showMessageDialog(
                             MainWindow.this,
                             "Gratulacje! Czas: " + gameState.getFormattedTime(),
@@ -125,6 +128,8 @@ public class MainWindow extends JFrame {
         gameState.reset();
         timerLabel.setText("00:00");
         errorLabel.setText("Błędy: 0/3");
+        errorLabel.setForeground(Color.BLACK);
+        setTitle("Sudoku");
 
         board = new Board();
         board.loadPuzzle(getNextPuzzle());
@@ -182,11 +187,14 @@ public class MainWindow extends JFrame {
         gameState.reset();
         timerLabel.setText("00:00");
         errorLabel.setText("Błędy: 0/3");
+        errorLabel.setForeground(Color.BLACK);
+        setTitle("Sudoku");
 
         board = new Board();
         board.loadPuzzle(getNextPuzzle());
         boardPanel.setEnabled(true);
         boardPanel.loadPuzzle(board);
+        errorLabel.setForeground(Color.BLACK);
 
         startTimer();
     }

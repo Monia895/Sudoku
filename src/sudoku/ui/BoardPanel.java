@@ -54,6 +54,7 @@ public class BoardPanel extends JPanel {
                     field.setText(String.valueOf(value));
                     field.setEditable(false);
                     field.setBackground(new Color(220, 220, 220));
+                    field.setCursor(Cursor.getDefaultCursor());
                 } else {
                     field.setText("");
                     field.setEditable(true);
