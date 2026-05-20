@@ -5,6 +5,7 @@ import sudoku.model.Board;
 import sudoku.logic.Difficulty;
 import sudoku.logic.Generator;
 import sudoku.game.GameSaver;
+import sudoku.logic.Solver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +19,9 @@ public class MainWindowV2 extends JFrame {
     private BoardPanel boardPanel;
     private Board board;
     private GameState gameState;
+
+    private JLabel hintLabel;
+    private JButton hintButton;
 
     private JLabel timerLabel;
     private JLabel errorLabel;
@@ -128,6 +132,21 @@ public class MainWindowV2 extends JFrame {
         saveButton.setMaximumSize(new Dimension(120, 35));
         saveButton.addActionListener(e -> saveGame());
 
+        hintLabel = new JLabel("Podpowiedzi: " + gameState.getHintsLeft());
+        hintLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        hintLabel.setForeground(Color.GRAY);
+        hintLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        hintButton = new JButton("Podpowiedź");
+        hintButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        hintButton.setMaximumSize(new Dimension(120, 35));
+        hintButton.addActionListener(e -> useHint(hintLabel, hintButton));
+
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(hintLabel);
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+        panel.add(hintButton);
+
         JButton loadButton = new JButton("Wczytaj grę");
         loadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         loadButton.setMaximumSize(new Dimension(120, 35));
@@ -193,6 +212,8 @@ public class MainWindowV2 extends JFrame {
         boardPanel.setEnabled(true);
         boardPanel.loadPuzzle(board);
         difficultyLabel.setText("Poziom: " + currentDifficulty);
+        hintLabel.setText("Podpowiedzi: 3");
+        hintButton.setEnabled(true);
 
         startTimer();
     }
@@ -214,6 +235,8 @@ public class MainWindowV2 extends JFrame {
         boardPanel.loadPuzzle(board);
         errorLabel.setForeground(Color.BLACK);
         difficultyLabel.setText("Poziom: " + currentDifficulty);
+        hintLabel.setText("Podpowiedzi: 3");
+        hintButton.setEnabled(true);
 
         startTimer();
     }
@@ -252,5 +275,46 @@ public class MainWindowV2 extends JFrame {
             );
             startTimer();
         }
+    }
+
+    private void useHint(JLabel hintLabel, JButton hintButton) {
+        if (!gameState.useHint()) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Wykorzystałeś wszystkie podpowiedzi.",
+                    "Brak podpowiedzi",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            return;
+        }
+
+        Solver solver = new Solver(board);
+        int[] hint = solver.getHint(board);
+
+        if (hint == null) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Nie można udzielić podpowiedzi.",
+                    "Błąd",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            gameState.useHint(); // cofnij zużycie
+            return;
+        }
+
+        int row = hint[0];
+        int col = hint[1];
+        int value = hint[2];
+
+        board.setValue(row, col, value);
+        board.getCell(row, col).setFixed(true);
+
+        JTextField field = boardPanel.getField(row, col);
+        field.setText(String.valueOf(value));
+        field.setEditable(false);
+        field.setBackground(new Color(200, 230, 200)); // zielone tło dla podpowiedzi
+
+        hintLabel.setText("Podpowiedzi: " + gameState.getHintsLeft());
+        if (gameState.getHintsLeft() == 0) hintButton.setEnabled(false);
     }
 }

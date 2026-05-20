@@ -25,6 +25,7 @@ public class GameState {
         errorCount = 0;
         elapsedSeconds = 0;
         isRunning = false;
+        hintsLeft = 3;
     }
 
     public String getFormattedTime() {
@@ -40,4 +41,16 @@ public class GameState {
     public void setErrorCount(int count) {
         this.errorCount = count;
     }
+
+    private int hintsLeft = 3;
+
+    public int getHintsLeft() { return hintsLeft; }
+
+    public boolean useHint() {
+        if (hintsLeft <= 0) return false;
+        hintsLeft--;
+        return true;
+    }
+
+    public void resetHints() { hintsLeft = 3; }
 }
