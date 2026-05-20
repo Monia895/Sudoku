@@ -2,9 +2,9 @@ package sudoku.ui;
 
 import sudoku.game.GameState;
 import sudoku.model.Board;
-
 import sudoku.logic.Difficulty;
 import sudoku.logic.Generator;
+import sudoku.game.GameSaver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -123,6 +123,22 @@ public class MainWindowV2 extends JFrame {
         resetButton.setMaximumSize(new Dimension(120, 35));
         resetButton.addActionListener(e -> resetGame());
 
+        JButton saveButton = new JButton("Zapisz grę");
+        saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        saveButton.setMaximumSize(new Dimension(120, 35));
+        saveButton.addActionListener(e -> saveGame());
+
+        JButton loadButton = new JButton("Wczytaj grę");
+        loadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        loadButton.setMaximumSize(new Dimension(120, 35));
+        loadButton.setEnabled(GameSaver.saveExists());
+        loadButton.addActionListener(e -> loadGame(loadButton));
+
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(saveButton);
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+        panel.add(loadButton);
+
         JButton menuButton = new JButton("Menu");
         menuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuButton.setMaximumSize(new Dimension(120, 35));
@@ -200,5 +216,41 @@ public class MainWindowV2 extends JFrame {
         difficultyLabel.setText("Poziom: " + currentDifficulty);
 
         startTimer();
+    }
+
+    private void saveGame() {
+        GameSaver.save(board, gameState);
+        JOptionPane.showMessageDialog(
+                this,
+                "Gra została zapisana.",
+                "Zapis",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+
+    private void loadGame(JButton loadButton) {
+        swingTimer.stop();
+
+        board = new Board();
+        gameState = new GameState();
+
+        boolean success = GameSaver.load(board, gameState);
+
+        if (success) {
+            boardPanel.setEnabled(true);
+            boardPanel.loadPuzzle(board);
+            timerLabel.setText(gameState.getFormattedTime());
+            errorLabel.setText("Błędy: " + gameState.getErrorCount() + "/3");
+            difficultyLabel.setText("Poziom: wczytana gra");
+            startTimer();
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Nie znaleziono zapisanej gry.",
+                    "Błąd",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            startTimer();
+        }
     }
 }

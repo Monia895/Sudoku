@@ -8,8 +8,7 @@ import sudoku.logic.Difficulty;
 
 public class Main {
     public static void main(String[] args) {
-
-        SwingUtilities.invokeLater(MenuWindow::new);
+              SwingUtilities.invokeLater(MenuWindow::new);
     }
 
 }

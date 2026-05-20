@@ -32,4 +32,12 @@ public class GameState {
         int seconds = elapsedSeconds % 60;
         return String.format("%02d:%02d", minutes, seconds);
     }
+
+    public void setElapsedSeconds(int seconds) {
+        this.elapsedSeconds = seconds;
+    }
+
+    public void setErrorCount(int count) {
+        this.errorCount = count;
+    }
 }
