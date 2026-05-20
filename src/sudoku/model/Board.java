@@ -67,5 +67,16 @@ public class Board {
         return true;
     }
 
+    public Board copy() {
+        Board copy = new Board();
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                copy.getCell(row, col).setValue(cells[row][col].getValue());
+                copy.getCell(row, col).setFixed(cells[row][col].isFixed());
+            }
+        }
+        return copy;
+    }
+
 
 }
