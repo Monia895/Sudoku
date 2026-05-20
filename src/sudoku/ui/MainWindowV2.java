@@ -3,10 +3,17 @@ package sudoku.ui;
 import sudoku.game.GameState;
 import sudoku.model.Board;
 
+import sudoku.logic.Difficulty;
+import sudoku.logic.Generator;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MainWindowV2 extends JFrame {
+
+    private Difficulty currentDifficulty = Difficulty.MEDIUM;
+    private Generator generator = new Generator();
+    private JLabel difficultyLabel;
 
     private BoardPanel boardPanel;
     private Board board;
@@ -24,7 +31,7 @@ public class MainWindowV2 extends JFrame {
         board = new Board();
         gameState = new GameState();
 
-        board.loadPuzzle(getNextPuzzle());
+        board = generateNewBoard();
 
         boardPanel = new BoardPanel();
         boardPanel.loadPuzzle(board);
@@ -87,9 +94,24 @@ public class MainWindowV2 extends JFrame {
         timerLabel.setFont(new Font("Arial", Font.BOLD, 24));
         timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        difficultyLabel = new JLabel("Poziom: " + currentDifficulty);
+        difficultyLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        difficultyLabel.setForeground(Color.GRAY);
+        difficultyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         errorLabel = new JLabel("Błędy: 0/3");
         errorLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JComboBox<Difficulty> difficultyBox = new JComboBox<>(Difficulty.values());
+        difficultyBox.setSelectedItem(currentDifficulty);
+        difficultyBox.setMaximumSize(new Dimension(120, 30));
+        difficultyBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+        difficultyBox.addActionListener(e -> {
+            currentDifficulty = (Difficulty) difficultyBox.getSelectedItem();
+        });
+
+
 
         JButton newGameButton = new JButton("Nowa gra");
         newGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -116,6 +138,15 @@ public class MainWindowV2 extends JFrame {
         panel.add(timerLabel);
         panel.add(Box.createRigidArea(new Dimension(0, 15)));
         panel.add(errorLabel);
+
+        panel.add(timerLabel);
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+        panel.add(difficultyLabel);
+
+        panel.add(difficultyBox);
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(newGameButton);
+
         panel.add(Box.createRigidArea(new Dimension(0, 30)));
         panel.add(newGameButton);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -142,55 +173,16 @@ public class MainWindowV2 extends JFrame {
         errorLabel.setForeground(Color.BLACK);
         setTitle("Sudoku");
 
-        board = new Board();
-        board.loadPuzzle(getNextPuzzle());
+        board = generateNewBoard();
         boardPanel.setEnabled(true);
         boardPanel.loadPuzzle(board);
+        difficultyLabel.setText("Poziom: " + currentDifficulty);
 
         startTimer();
     }
 
-    private static final int[][][] PUZZLES = {
-            {
-                    {5,3,0,0,7,0,0,0,0},
-                    {6,0,0,1,9,5,0,0,0},
-                    {0,9,8,0,0,0,0,6,0},
-                    {8,0,0,0,6,0,0,0,3},
-                    {4,0,0,8,0,3,0,0,1},
-                    {7,0,0,0,2,0,0,0,6},
-                    {0,6,0,0,0,0,2,8,0},
-                    {0,0,0,4,1,9,0,0,5},
-                    {0,0,0,0,8,0,0,7,9}
-            },
-            {
-                    {0,0,0,2,6,0,7,0,1},
-                    {6,8,0,0,7,0,0,9,0},
-                    {1,9,0,0,0,4,5,0,0},
-                    {8,2,0,1,0,0,0,4,0},
-                    {0,0,4,6,0,2,9,0,0},
-                    {0,5,0,0,0,3,0,2,8},
-                    {0,0,9,3,0,0,0,7,4},
-                    {0,4,0,0,5,0,0,3,6},
-                    {7,0,3,0,1,8,0,0,0}
-            },
-            {
-                    {0,0,0,0,0,0,0,1,2},
-                    {0,0,0,0,3,5,0,0,0},
-                    {0,0,0,6,0,0,0,7,0},
-                    {7,0,0,0,0,0,3,0,0},
-                    {0,0,0,4,0,0,8,0,0},
-                    {1,0,0,0,0,0,0,0,0},
-                    {0,0,0,1,2,0,0,0,0},
-                    {0,8,0,0,0,0,0,4,0},
-                    {0,5,0,0,0,0,6,0,0}
-            }
-    };
-
-    private int currentPuzzleIndex = 0;
-
-    private int[][] getNextPuzzle() {
-        currentPuzzleIndex = (currentPuzzleIndex + 1) % PUZZLES.length;
-        return PUZZLES[currentPuzzleIndex];
+    private Board generateNewBoard() {
+        return generator.generate(currentDifficulty);
     }
 
     private void newGame() {
@@ -201,11 +193,11 @@ public class MainWindowV2 extends JFrame {
         errorLabel.setForeground(Color.BLACK);
         setTitle("Sudoku");
 
-        board = new Board();
-        board.loadPuzzle(getNextPuzzle());
+        board = generateNewBoard();
         boardPanel.setEnabled(true);
         boardPanel.loadPuzzle(board);
         errorLabel.setForeground(Color.BLACK);
+        difficultyLabel.setText("Poziom: " + currentDifficulty);
 
         startTimer();
     }
