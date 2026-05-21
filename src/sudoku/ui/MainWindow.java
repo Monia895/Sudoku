@@ -82,9 +82,11 @@ public class MainWindow extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         panel.setPreferredSize(new Dimension(130, 450));
+        panel.setBackground(new Color(255, 235, 242));
 
         timerLabel = new JLabel("00:00");
         timerLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        timerLabel.setForeground(new Color(180, 60, 100));
         timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         errorLabel = new JLabel("Błędy: 0/3");
@@ -94,16 +96,28 @@ public class MainWindow extends JFrame {
         JButton newGameButton = new JButton("Nowa gra");
         newGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         newGameButton.setMaximumSize(new Dimension(120, 35));
+        newGameButton.setBackground(new Color(220, 80, 120));
+        newGameButton.setForeground(Color.WHITE);
+        newGameButton.setOpaque(true);
+        newGameButton.setBorderPainted(false);
         newGameButton.addActionListener(e -> newGame());
 
         JButton resetButton = new JButton("Resetuj");
         resetButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         resetButton.setMaximumSize(new Dimension(120, 35));
+        resetButton.setBackground(new Color(255, 210, 225));
+        resetButton.setForeground(new Color(180, 60, 100));
+        resetButton.setOpaque(true);
+        resetButton.setBorderPainted(false);
         resetButton.addActionListener(e -> resetGame());
 
         JButton menuButton = new JButton("Menu");
         menuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuButton.setMaximumSize(new Dimension(120, 35));
+        menuButton.setBackground(new Color(255, 210, 225));
+        menuButton.setOpaque(true);
+        menuButton.setBorderPainted(false);
+
         menuButton.addActionListener(e -> {
             new MenuWindow();
             dispose();

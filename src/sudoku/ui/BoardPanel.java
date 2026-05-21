@@ -69,7 +69,7 @@ public class BoardPanel extends JPanel {
                 if (value > 0) {
                     field.setText(String.valueOf(value));
                     field.setEditable(false);
-                    field.setBackground(new Color(220, 220, 220));
+                    field.setBackground(new Color(235, 225, 210));
                     field.setCursor(Cursor.getDefaultCursor());
 
                     int cellValue = value;

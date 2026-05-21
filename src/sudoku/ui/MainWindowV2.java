@@ -93,12 +93,12 @@ public class MainWindowV2 extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.setPreferredSize(new Dimension(140, 450));
-        panel.setBackground(new Color(245, 245, 245));
+        panel.setBackground(new Color(255, 235, 242));
 
         // timer
         timerLabel = new JLabel("00:00");
         timerLabel.setFont(new Font("Arial", Font.BOLD, 28));
-        timerLabel.setForeground(new Color(30, 90, 160));
+        timerLabel.setForeground(new Color(180, 60, 100));
         timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // błędy
@@ -125,11 +125,19 @@ public class MainWindowV2 extends JFrame {
         newGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         newGameButton.setMaximumSize(new Dimension(120, 30));
         newGameButton.addActionListener(e -> newGame());
+        newGameButton.setBackground(new Color(220, 80, 120));
+        newGameButton.setForeground(Color.WHITE);
+        newGameButton.setOpaque(true);
+        newGameButton.setBorderPainted(false);
 
         JButton resetButton = new JButton("Resetuj");
         resetButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         resetButton.setMaximumSize(new Dimension(120, 30));
         resetButton.addActionListener(e -> resetGame());
+        resetButton.setBackground(new Color(255, 210, 225));
+        resetButton.setForeground(new Color(180, 60, 100));
+        resetButton.setOpaque(true);
+        resetButton.setBorderPainted(false);
 
         // podpowiedzi
         hintLabel = new JLabel("Podpowiedzi: " + gameState.getHintsLeft());
@@ -142,23 +150,40 @@ public class MainWindowV2 extends JFrame {
         hintButton.setMaximumSize(new Dimension(120, 30));
         hintButton.addActionListener(e -> useHint(hintLabel, hintButton));
 
+        hintButton.setBackground(new Color(255, 210, 225));
+        hintButton.setForeground(new Color(180, 60, 100));
+        hintButton.setOpaque(true);
+        hintButton.setBorderPainted(false);
+
         // zapis
         JButton saveButton = new JButton("Zapisz grę");
         saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         saveButton.setMaximumSize(new Dimension(120, 30));
         saveButton.addActionListener(e -> saveGame());
+        saveButton.setBackground(new Color(255, 210, 225));
+        saveButton.setForeground(new Color(180, 60, 100));
+        saveButton.setOpaque(true);
+        saveButton.setBorderPainted(false);
 
         JButton loadButton = new JButton("Wczytaj grę");
         loadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         loadButton.setMaximumSize(new Dimension(120, 30));
         loadButton.setEnabled(GameSaver.saveExists());
         loadButton.addActionListener(e -> loadGame(loadButton));
+        loadButton.setBackground(new Color(255, 210, 225));
+        loadButton.setForeground(new Color(180, 60, 100));
+        loadButton.setOpaque(true);
+        loadButton.setBorderPainted(false);
 
         // menu
         JButton menuButton = new JButton("Menu");
         menuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuButton.setMaximumSize(new Dimension(120, 30));
         menuButton.addActionListener(e -> { new MenuWindow(); dispose(); });
+        menuButton.setBackground(new Color(255, 210, 225));
+        menuButton.setForeground(new Color(180, 60, 100));
+        menuButton.setOpaque(true);
+        menuButton.setBorderPainted(false);
 
         // składanie panelu
         panel.add(Box.createVerticalGlue());
