@@ -13,6 +13,21 @@ public class BoardPanel extends JPanel {
 
     private JTextField[][] fields = new JTextField[9][9];
 
+    private static final Color[] DIGIT_COLORS = {
+            null,
+            new Color(255, 170, 170),    // 1 — czerwony
+            new Color(255, 210, 130),    // 2 — pomarańczowy
+            new Color(255, 255, 140),    // 3 — żółty
+            new Color(160, 230, 160),    // 4 — zielony
+            new Color(140, 210, 255),    // 5 — niebieski
+            new Color(190, 170, 255),    // 6 — fioletowy
+            new Color(255, 170, 220),    // 7 — różowy
+            new Color(150, 230, 210),    // 8 — turkusowy
+            new Color(255, 195, 150),    // 9 — brzoskwiniowy
+    };
+
+    private int highlightedDigit = 0;
+
     public BoardPanel() {
         setLayout(new GridLayout(9, 9));
         setPreferredSize(new Dimension(450, 450));
@@ -43,6 +58,7 @@ public class BoardPanel extends JPanel {
 
     public void loadPuzzle(Board board) {
         this.board = board;
+        highlightedDigit = 0;
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 JTextField field = fields[row][col];
@@ -55,11 +71,31 @@ public class BoardPanel extends JPanel {
                     field.setEditable(false);
                     field.setBackground(new Color(220, 220, 220));
                     field.setCursor(Cursor.getDefaultCursor());
+
+                    int cellValue = value;
+                    field.addMouseListener(new java.awt.event.MouseAdapter() {
+                        @Override
+                        public void mouseClicked(java.awt.event.MouseEvent e) {
+                            highlightDigit(cellValue);
+                        }
+                    });
+
                 } else {
                     field.setText("");
                     field.setEditable(true);
                     field.setBackground(Color.WHITE);
                     addValidationListener(field, row, col, board);
+
+                    final int finalRow = row;
+                    final int finalCol = col;
+                    field.addMouseListener(new java.awt.event.MouseAdapter() {
+                        @Override
+                        public void mouseClicked(java.awt.event.MouseEvent e) {
+                            int val = board.getValue(finalRow, finalCol);
+                            if (val != 0) highlightDigit(val);
+                        }
+                    });
+
                 }
             }
         }
@@ -102,6 +138,10 @@ public class BoardPanel extends JPanel {
                 if (valid && gameEventListener != null) {
                     gameEventListener.onCorrectInput();
                 }
+
+                if (highlightedDigit != 0) {
+                    refreshHighlight();
+                }
             }
         });
     }
@@ -126,5 +166,39 @@ public class BoardPanel extends JPanel {
 
     public void setGameEventListener(GameEventListener listener) {
         this.gameEventListener = listener;
+    }
+
+    private void highlightDigit(int digit) {
+        if (highlightedDigit == digit) {
+            highlightedDigit = 0;
+        } else {
+            highlightedDigit = digit;
+        }
+        refreshHighlight();
+    }
+
+    private void refreshHighlight() {
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                JTextField field = fields[row][col];
+                int value = board.getValue(row, col);
+
+                if (board.isFixed(row, col)) {
+                    if (highlightedDigit != 0 && value == highlightedDigit) {
+                        field.setBackground(DIGIT_COLORS[highlightedDigit]);
+                    } else {
+                        field.setBackground(new Color(235, 225, 210));
+                    }
+                } else {
+                    if (highlightedDigit != 0 && value == highlightedDigit) {
+                        field.setBackground(DIGIT_COLORS[highlightedDigit]);
+                    } else if (board.getCell(row, col).hasError()) {
+                        field.setBackground(new Color(255, 200, 200));
+                    } else {
+                        field.setBackground(Color.WHITE);
+                    }
+                }
+            }
+        }
     }
 }
