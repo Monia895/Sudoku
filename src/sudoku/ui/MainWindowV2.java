@@ -91,101 +91,98 @@ public class MainWindowV2 extends JFrame {
     private JPanel createSidePanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        panel.setPreferredSize(new Dimension(130, 450));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel.setPreferredSize(new Dimension(140, 450));
+        panel.setBackground(new Color(245, 245, 245));
 
+        // timer
         timerLabel = new JLabel("00:00");
-        timerLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        timerLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        timerLabel.setForeground(new Color(30, 90, 160));
         timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // błędy
+        errorLabel = new JLabel("Błędy: 0/3");
+        errorLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // poziom
         difficultyLabel = new JLabel("Poziom: " + currentDifficulty);
-        difficultyLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        difficultyLabel.setFont(new Font("Arial", Font.PLAIN, 11));
         difficultyLabel.setForeground(Color.GRAY);
         difficultyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        errorLabel = new JLabel("Błędy: 0/3");
-        errorLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         JComboBox<Difficulty> difficultyBox = new JComboBox<>(Difficulty.values());
         difficultyBox.setSelectedItem(currentDifficulty);
-        difficultyBox.setMaximumSize(new Dimension(120, 30));
+        difficultyBox.setMaximumSize(new Dimension(120, 28));
         difficultyBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-        difficultyBox.addActionListener(e -> {
-            currentDifficulty = (Difficulty) difficultyBox.getSelectedItem();
-        });
+        difficultyBox.addActionListener(e ->
+                currentDifficulty = (Difficulty) difficultyBox.getSelectedItem()
+        );
 
-
-
+        // przyciski gry
         JButton newGameButton = new JButton("Nowa gra");
         newGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        newGameButton.setMaximumSize(new Dimension(120, 35));
+        newGameButton.setMaximumSize(new Dimension(120, 30));
         newGameButton.addActionListener(e -> newGame());
 
         JButton resetButton = new JButton("Resetuj");
         resetButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        resetButton.setMaximumSize(new Dimension(120, 35));
+        resetButton.setMaximumSize(new Dimension(120, 30));
         resetButton.addActionListener(e -> resetGame());
 
-        JButton saveButton = new JButton("Zapisz grę");
-        saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        saveButton.setMaximumSize(new Dimension(120, 35));
-        saveButton.addActionListener(e -> saveGame());
-
+        // podpowiedzi
         hintLabel = new JLabel("Podpowiedzi: " + gameState.getHintsLeft());
-        hintLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        hintLabel.setFont(new Font("Arial", Font.PLAIN, 11));
         hintLabel.setForeground(Color.GRAY);
         hintLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         hintButton = new JButton("Podpowiedź");
         hintButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        hintButton.setMaximumSize(new Dimension(120, 35));
+        hintButton.setMaximumSize(new Dimension(120, 30));
         hintButton.addActionListener(e -> useHint(hintLabel, hintButton));
 
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(hintLabel);
-        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-        panel.add(hintButton);
+        // zapis
+        JButton saveButton = new JButton("Zapisz grę");
+        saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        saveButton.setMaximumSize(new Dimension(120, 30));
+        saveButton.addActionListener(e -> saveGame());
 
         JButton loadButton = new JButton("Wczytaj grę");
         loadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        loadButton.setMaximumSize(new Dimension(120, 35));
+        loadButton.setMaximumSize(new Dimension(120, 30));
         loadButton.setEnabled(GameSaver.saveExists());
         loadButton.addActionListener(e -> loadGame(loadButton));
 
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(saveButton);
-        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-        panel.add(loadButton);
-
+        // menu
         JButton menuButton = new JButton("Menu");
         menuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        menuButton.setMaximumSize(new Dimension(120, 35));
-        menuButton.addActionListener(e -> {
-            new MenuWindow();
-            dispose();
-        });
+        menuButton.setMaximumSize(new Dimension(120, 30));
+        menuButton.addActionListener(e -> { new MenuWindow(); dispose(); });
 
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(menuButton);
-
+        // składanie panelu
         panel.add(Box.createVerticalGlue());
         panel.add(timerLabel);
-        panel.add(Box.createRigidArea(new Dimension(0, 15)));
+        panel.add(Box.createRigidArea(new Dimension(0, 4)));
         panel.add(errorLabel);
-
-        panel.add(timerLabel);
-        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+        panel.add(Box.createRigidArea(new Dimension(0, 8)));
         panel.add(difficultyLabel);
-
+        panel.add(Box.createRigidArea(new Dimension(0, 4)));
         panel.add(difficultyBox);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(Box.createRigidArea(new Dimension(0, 12)));
         panel.add(newGameButton);
-
-        panel.add(Box.createRigidArea(new Dimension(0, 30)));
-        panel.add(newGameButton);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(Box.createRigidArea(new Dimension(0, 6)));
         panel.add(resetButton);
+        panel.add(Box.createRigidArea(new Dimension(0, 12)));
+        panel.add(hintLabel);
+        panel.add(Box.createRigidArea(new Dimension(0, 4)));
+        panel.add(hintButton);
+        panel.add(Box.createRigidArea(new Dimension(0, 12)));
+        panel.add(saveButton);
+        panel.add(Box.createRigidArea(new Dimension(0, 6)));
+        panel.add(loadButton);
+        panel.add(Box.createRigidArea(new Dimension(0, 12)));
+        panel.add(menuButton);
         panel.add(Box.createVerticalGlue());
 
         return panel;

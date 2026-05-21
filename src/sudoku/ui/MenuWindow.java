@@ -13,40 +13,50 @@ public class MenuWindow extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(40, 60, 40, 60));
+        panel.setBackground(Color.WHITE);
 
         JLabel title = new JLabel("SUDOKU");
-        title.setFont(new Font("Arial", Font.BOLD, 36));
+        title.setFont(new Font("Arial", Font.BOLD, 42));
+        title.setForeground(new Color(30, 90, 160));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel subtitle = new JLabel("Wybierz wersję gry");
-        subtitle.setFont(new Font("Arial", Font.PLAIN, 14));
+        subtitle.setFont(new Font("Arial", Font.PLAIN, 13));
         subtitle.setForeground(Color.GRAY);
         subtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JSeparator separator = new JSeparator();
+        separator.setMaximumSize(new Dimension(200, 10));
+        separator.setForeground(new Color(200, 200, 200));
 
         JButton classicButton = new JButton("Wersja klasyczna");
         classicButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         classicButton.setMaximumSize(new Dimension(200, 40));
         classicButton.setFont(new Font("Arial", Font.PLAIN, 14));
-        classicButton.addActionListener(e -> {
-            new MainWindow();
-            dispose();
-        });
+        classicButton.setBackground(new Color(30, 90, 160));
+        classicButton.setForeground(Color.WHITE);
+        classicButton.setOpaque(true);
+        classicButton.setBorderPainted(false);
+        classicButton.addActionListener(e -> { new MainWindow(); dispose(); });
 
         JButton extendedButton = new JButton("Wersja rozszerzona");
         extendedButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         extendedButton.setMaximumSize(new Dimension(200, 40));
         extendedButton.setFont(new Font("Arial", Font.PLAIN, 14));
-        extendedButton.addActionListener(e -> {
-            new MainWindowV2();
-            dispose();
-        });
+        extendedButton.setBackground(new Color(240, 240, 240));
+        extendedButton.setForeground(new Color(30, 90, 160));
+        extendedButton.setOpaque(true);
+        extendedButton.setBorderPainted(false);
+        extendedButton.addActionListener(e -> { new MainWindowV2(); dispose(); });
 
         panel.add(title);
-        panel.add(Box.createRigidArea(new Dimension(0, 8)));
+        panel.add(Box.createRigidArea(new Dimension(0, 6)));
         panel.add(subtitle);
-        panel.add(Box.createRigidArea(new Dimension(0, 40)));
+        panel.add(Box.createRigidArea(new Dimension(0, 20)));
+        panel.add(separator);
+        panel.add(Box.createRigidArea(new Dimension(0, 20)));
         panel.add(classicButton);
-        panel.add(Box.createRigidArea(new Dimension(0, 12)));
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(extendedButton);
 
         add(panel);
