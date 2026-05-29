@@ -28,6 +28,9 @@ public class BoardPanel extends JPanel {
 
     private int highlightedDigit = 0;
 
+    private int selectedRow = -1;
+    private int selectedCol = -1;
+
     public BoardPanel() {
         setLayout(new GridLayout(9, 9));
         setPreferredSize(new Dimension(450, 450));
@@ -59,6 +62,8 @@ public class BoardPanel extends JPanel {
     public void loadPuzzle(Board board) {
         this.board = board;
         highlightedDigit = 0;
+        selectedRow = -1;
+        selectedCol = -1;
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 JTextField field = fields[row][col];
@@ -72,11 +77,22 @@ public class BoardPanel extends JPanel {
                     field.setBackground(new Color(235, 225, 210));
                     field.setCursor(Cursor.getDefaultCursor());
 
-                    int cellValue = value;
+                    final int finalRow = row;
+                    final int finalCol = col;
+                    final int cellValue = value;
                     field.addMouseListener(new java.awt.event.MouseAdapter() {
                         @Override
                         public void mouseClicked(java.awt.event.MouseEvent e) {
-                            highlightDigit(cellValue);
+                            if (selectedRow == finalRow && selectedCol == finalCol) {
+                                selectedRow = -1;
+                                selectedCol = -1;
+                                highlightedDigit = 0;
+                            } else {
+                                selectedRow = finalRow;
+                                selectedCol = finalCol;
+                                highlightDigit(cellValue);
+                            }
+                            refreshHighlight();
                         }
                     });
 
@@ -91,8 +107,22 @@ public class BoardPanel extends JPanel {
                     field.addMouseListener(new java.awt.event.MouseAdapter() {
                         @Override
                         public void mouseClicked(java.awt.event.MouseEvent e) {
-                            int val = board.getValue(finalRow, finalCol);
-                            if (val != 0) highlightDigit(val);
+                            if (selectedRow == finalRow && selectedCol == finalCol) {
+                                selectedRow = -1;
+                                selectedCol = -1;
+                                highlightedDigit = 0;
+                            } else {
+                                selectedRow = finalRow;
+                                selectedCol = finalCol;
+                                int val = board.getValue(finalRow, finalCol);
+                                if (val != 0) {
+                                    highlightDigit(val);
+                                } else {
+                                    highlightedDigit = 0;
+                                    refreshHighlight();
+                                }
+                            }
+                            refreshHighlight();
                         }
                     });
 
@@ -114,6 +144,7 @@ public class BoardPanel extends JPanel {
                 field.setBackground(Color.WHITE);
                 board.setValue(row, col, 0);
                 board.getCell(row, col).setHasError(false);
+                if (selectedRow != -1) refreshHighlight();
             }
 
             @Override
@@ -182,21 +213,24 @@ public class BoardPanel extends JPanel {
             for (int col = 0; col < 9; col++) {
                 JTextField field = fields[row][col];
                 int value = board.getValue(row, col);
+                boolean isFixed = board.isFixed(row, col);
+                boolean inSelectedLine = (row == selectedRow || col == selectedCol);
+                boolean matchesDigit = highlightedDigit != 0 && value == highlightedDigit;
 
-                if (board.isFixed(row, col)) {
-                    if (highlightedDigit != 0 && value == highlightedDigit) {
-                        field.setBackground(DIGIT_COLORS[highlightedDigit]);
+                if (matchesDigit) {
+                    field.setBackground(DIGIT_COLORS[highlightedDigit]);
+                } else if (inSelectedLine) {
+                    if (isFixed) {
+                        field.setBackground(new Color(220, 195, 210)); // beżowo-różowy
                     } else {
-                        field.setBackground(new Color(235, 225, 210));
+                        field.setBackground(new Color(255, 225, 235)); // jasnoróżowy
                     }
+                } else if (!isFixed && board.getCell(row, col).hasError()) {
+                    field.setBackground(new Color(255, 200, 200));
+                } else if (isFixed) {
+                    field.setBackground(new Color(235, 225, 210));
                 } else {
-                    if (highlightedDigit != 0 && value == highlightedDigit) {
-                        field.setBackground(DIGIT_COLORS[highlightedDigit]);
-                    } else if (board.getCell(row, col).hasError()) {
-                        field.setBackground(new Color(255, 200, 200));
-                    } else {
-                        field.setBackground(Color.WHITE);
-                    }
+                    field.setBackground(Color.WHITE);
                 }
             }
         }
