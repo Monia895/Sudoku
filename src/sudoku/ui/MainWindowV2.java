@@ -1,5 +1,6 @@
 package sudoku.ui;
 
+import sudoku.game.BestTimes;
 import sudoku.game.GameState;
 import sudoku.model.Board;
 import sudoku.logic.Difficulty;
@@ -70,11 +71,11 @@ public class MainWindowV2 extends JFrame {
                 if (board.isSolved()) {
                     swingTimer.stop();
                     setTitle("Sudoku — Wygrana!");
-                    JOptionPane.showMessageDialog(
+                    new WinDialog(
                             MainWindowV2.this,
-                            "Gratulacje! Czas: " + gameState.getFormattedTime(),
-                            "Wygrana!",
-                            JOptionPane.INFORMATION_MESSAGE
+                            gameState.getElapsedSeconds(),
+                            gameState.getErrorCount(),
+                            currentDifficulty
                     );
                 }
             }
@@ -185,6 +186,15 @@ public class MainWindowV2 extends JFrame {
         menuButton.setOpaque(true);
         menuButton.setBorderPainted(false);
 
+        JButton bestTimesButton = new JButton("Rekordy");
+        bestTimesButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        bestTimesButton.setMaximumSize(new Dimension(120, 30));
+        bestTimesButton.setBackground(new Color(255, 210, 225));
+        bestTimesButton.setForeground(new Color(180, 60, 100));
+        bestTimesButton.setOpaque(true);
+        bestTimesButton.setBorderPainted(false);
+        bestTimesButton.addActionListener(e -> showBestTimes());
+
         // składanie panelu
         panel.add(Box.createVerticalGlue());
         panel.add(timerLabel);
@@ -209,6 +219,9 @@ public class MainWindowV2 extends JFrame {
         panel.add(Box.createRigidArea(new Dimension(0, 12)));
         panel.add(menuButton);
         panel.add(Box.createVerticalGlue());
+
+        panel.add(Box.createRigidArea(new Dimension(0, 6)));
+        panel.add(bestTimesButton);
 
         return panel;
     }
@@ -338,5 +351,24 @@ public class MainWindowV2 extends JFrame {
 
         hintLabel.setText("Podpowiedzi: " + gameState.getHintsLeft());
         if (gameState.getHintsLeft() == 0) hintButton.setEnabled(false);
+    }
+
+    private void showBestTimes() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Najlepsze czasy:\n\n");
+
+        for (Difficulty diff : Difficulty.values()) {
+            Integer best = BestTimes.getBest(diff);
+            sb.append(diff).append(": ");
+            sb.append(best != null ? BestTimes.format(best) : "brak rekordu");
+            sb.append("\n");
+        }
+
+        JOptionPane.showMessageDialog(
+                this,
+                sb.toString(),
+                "Rekordy",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 }

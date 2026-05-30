@@ -69,6 +69,13 @@ public class BoardPanel extends JPanel {
                 JTextField field = fields[row][col];
                 field.setDocument(new LimitDocument());
 
+                java.awt.event.MouseListener[] listeners = field.getMouseListeners();
+                for (java.awt.event.MouseListener ml : listeners) {
+                    if (ml instanceof java.awt.event.MouseAdapter) {
+                        field.removeMouseListener(ml);
+                    }
+                }
+
                 int value = board.getValue(row, col);
 
                 if (value > 0) {
