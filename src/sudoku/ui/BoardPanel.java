@@ -1,5 +1,7 @@
 package sudoku.ui;
 
+import java.util.ArrayList;
+import java.util.List;
 import sudoku.model.Board;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -189,5 +191,41 @@ public class BoardPanel extends JPanel {
                 }
             }
         }
+    }
+
+    public void playWinAnimation() {
+        Color[] colors = {
+                new Color(255, 170, 170),
+                new Color(255, 210, 130),
+                new Color(255, 255, 140),
+                new Color(160, 230, 160),
+                new Color(140, 210, 255),
+                new Color(190, 170, 255),
+                new Color(255, 170, 220),
+                new Color(150, 230, 210),
+                new Color(255, 195, 150),
+        };
+
+        List<int[]> positions = new ArrayList<>();
+        for (int row = 0; row < 9; row++)
+            for (int col = 0; col < 9; col++)
+                positions.add(new int[]{row, col});
+
+        java.util.Collections.shuffle(positions);
+        java.util.Random random = new java.util.Random();
+
+        final int[] index = {0};
+        javax.swing.Timer animTimer = new javax.swing.Timer(30, null);
+        animTimer.addActionListener(e -> {
+            if (index[0] >= positions.size()) {
+                animTimer.stop();
+                return;
+            }
+            int row = positions.get(index[0])[0];
+            int col = positions.get(index[0])[1];
+            fields[row][col].setBackground(colors[random.nextInt(colors.length)]);
+            index[0]++;
+        });
+        animTimer.start();
     }
 }

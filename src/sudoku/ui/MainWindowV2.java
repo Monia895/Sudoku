@@ -71,12 +71,19 @@ public class MainWindowV2 extends JFrame {
                 if (board.isSolved()) {
                     swingTimer.stop();
                     setTitle("Sudoku — Wygrana!");
-                    new WinDialog(
+                    boardPanel.playWinAnimation();
+
+
+                    javax.swing.Timer delay = new javax.swing.Timer(1200, e -> {
+                        new WinDialog(
                             MainWindowV2.this,
                             gameState.getElapsedSeconds(),
                             gameState.getErrorCount(),
                             currentDifficulty
-                    );
+                        );
+                    });
+                    delay.setRepeats(false);
+                    delay.start();
                 }
             }
         });
