@@ -72,6 +72,7 @@ public class MainWindow extends JFrame {
         add(mainPanel);
         pack();
         setLocationRelativeTo(null);
+        setIconImage(loadIcon());
         setVisible(true);
 
         startTimer();
@@ -222,5 +223,15 @@ public class MainWindow extends JFrame {
         errorLabel.setForeground(Color.BLACK);
 
         startTimer();
+    }
+
+    private Image loadIcon() {
+        try {
+            return new ImageIcon(
+                    getClass().getClassLoader().getResource("icon.png")
+            ).getImage();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

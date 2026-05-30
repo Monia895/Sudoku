@@ -84,6 +84,7 @@ public class MainWindowV2 extends JFrame {
         add(mainPanel);
         pack();
         setLocationRelativeTo(null);
+        setIconImage(loadIcon());
         setVisible(true);
 
         startTimer();
@@ -370,5 +371,15 @@ public class MainWindowV2 extends JFrame {
                 "Rekordy",
                 JOptionPane.INFORMATION_MESSAGE
         );
+    }
+
+    private Image loadIcon() {
+        try {
+            return new ImageIcon(
+                    getClass().getClassLoader().getResource("icon.png")
+            ).getImage();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

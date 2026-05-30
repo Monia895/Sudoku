@@ -62,6 +62,17 @@ public class MenuWindow extends JFrame {
         add(panel);
         pack();
         setLocationRelativeTo(null);
+        setIconImage(loadIcon());
         setVisible(true);
+    }
+
+    private Image loadIcon() {
+        try {
+            return new ImageIcon(
+                    getClass().getClassLoader().getResource("icon.png")
+            ).getImage();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
