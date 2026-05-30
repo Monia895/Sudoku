@@ -13,6 +13,8 @@ import java.awt.*;
 
 public class MainWindowV2 extends JFrame {
 
+    private Board originalBoard;
+
     private Difficulty currentDifficulty = Difficulty.MEDIUM;
     private Generator generator = new Generator();
     private JLabel difficultyLabel;
@@ -37,6 +39,7 @@ public class MainWindowV2 extends JFrame {
         gameState = new GameState();
 
         board = generateNewBoard();
+        originalBoard = board.copy();
 
         boardPanel = new BoardPanel();
         boardPanel.loadPuzzle(board);
@@ -251,7 +254,7 @@ public class MainWindowV2 extends JFrame {
         errorLabel.setForeground(Color.BLACK);
         setTitle("Sudoku");
 
-        board = generateNewBoard();
+        board = originalBoard.copy();
         boardPanel.setEnabled(true);
         boardPanel.loadPuzzle(board);
         difficultyLabel.setText("Poziom: " + currentDifficulty);
@@ -274,6 +277,7 @@ public class MainWindowV2 extends JFrame {
         setTitle("Sudoku");
 
         board = generateNewBoard();
+        originalBoard = board.copy();
         boardPanel.setEnabled(true);
         boardPanel.loadPuzzle(board);
         errorLabel.setForeground(Color.BLACK);

@@ -8,6 +8,7 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
 
+    private Board originalBoard;
     private BoardPanel boardPanel;
     private Board board;
     private GameState gameState;
@@ -25,6 +26,7 @@ public class MainWindow extends JFrame {
         gameState = new GameState();
 
         board.loadPuzzle(getNextPuzzle());
+        originalBoard = board.copy();
 
         boardPanel = new BoardPanel();
         boardPanel.loadPuzzle(board);
@@ -157,8 +159,7 @@ public class MainWindow extends JFrame {
         errorLabel.setForeground(Color.BLACK);
         setTitle("Sudoku");
 
-        board = new Board();
-        board.loadPuzzle(getNextPuzzle());
+        board = originalBoard.copy();
         boardPanel.setEnabled(true);
         boardPanel.loadPuzzle(board);
 
@@ -218,6 +219,7 @@ public class MainWindow extends JFrame {
 
         board = new Board();
         board.loadPuzzle(getNextPuzzle());
+        originalBoard = board.copy();
         boardPanel.setEnabled(true);
         boardPanel.loadPuzzle(board);
         errorLabel.setForeground(Color.BLACK);
